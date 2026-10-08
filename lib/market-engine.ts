@@ -156,7 +156,7 @@ export function predictTrend(candles: Candle[]): TrendPrediction {
   add(e20 > e50 ? 18 : -18, e20 > e50 ? "EMA20 is above EMA50" : "EMA20 is below EMA50");
   add(price > e200 ? 14 : -14, price > e200 ? "Price is above EMA200" : "Price is below EMA200");
   add(m.histogram > 0 ? 12 : -12, m.histogram > 0 ? "MACD momentum is positive" : "MACD momentum is negative");
-  add(r >= 52 && r <= 68 ? 10 : r <= 45 ? -10 : r >= 75 ? -6 : 0, r >= 52 && r <= 68 ? "RSI supports bullish momentum" : r <= 45 ? "RSI confirms bearish momentum" : r >= 75 ? "RSI is overbought");
+  add(r >= 52 && r <= 68 ? 10 : r <= 45 ? -10 : r >= 75 ? -6 : 0, r >= 52 && r <= 68 ? "RSI supports bullish momentum" : r <= 45 ? "RSI confirms bearish momentum" : r >= 75 ? "RSI is overbought" : "");
   add(structure === "BULLISH" ? 16 : structure === "BEARISH" ? -16 : 0, structure === "BULLISH" ? "Higher-high/higher-low structure" : structure === "BEARISH" ? "Lower-high/lower-low structure" : "");
   add(bos === "BULLISH" ? 10 : bos === "BEARISH" ? -10 : 0, bos === "BULLISH" ? "Bullish break of structure" : bos === "BEARISH" ? "Bearish break of structure" : "");
   add(d >= 25 ? (m.histogram >= 0 ? 8 : -8) : 0, d >= 25 ? "ADX confirms a directional regime" : "");
