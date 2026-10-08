@@ -1,0 +1,1 @@
+Advanced multi-timeframe analysis is planned for the next dashboard iteration.
