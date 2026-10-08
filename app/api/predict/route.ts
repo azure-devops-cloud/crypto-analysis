@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { analyzeCandles, Candle } from "@/lib/market-engine";
+import { analyzeCandles, Candle } from "../../../lib/market-engine";
 
 const allowed = new Set(["BTCUSDT","ETHUSDT","SOLUSDT"]);
 const intervals = new Set(["15m","1h","4h","1d"]);
