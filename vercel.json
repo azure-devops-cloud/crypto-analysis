@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/autonomous", "schedule": "*/15 * * * *" }
+  ]
+}
