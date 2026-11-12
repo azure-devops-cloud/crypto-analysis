@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
-export const preferredRegion = "bom1";
 // Keep this experimental market-data API in Mumbai; scoped to this route and branch.
 export const preferredRegion = "bom1";
 export const revalidate = 0;
