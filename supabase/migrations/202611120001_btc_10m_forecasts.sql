@@ -84,3 +84,8 @@ returns boolean language sql stable security invoker set search_path = '' as $$
 $$;
 revoke all on function public.verify_btc_10m_worker_secret(text) from public, anon, authenticated;
 grant execute on function public.verify_btc_10m_worker_secret(text) to service_role;
+
+select vault.create_secret(encode(gen_random_bytes(32), 'hex'), 'btc_10m_worker_secret',
+  'Private shared secret for the isolated BTC 10-minute forecast worker');
+select vault.create_secret('https://xngzpvzhmtuxplslvtud.supabase.co', 'btc_10m_project_url',
+  'Supabase project URL for the BTC 10-minute worker');
