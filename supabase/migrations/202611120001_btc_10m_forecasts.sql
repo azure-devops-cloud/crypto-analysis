@@ -41,3 +41,34 @@ select p.period,
 from periods p left join public.btc_10m_forecasts f on p.since_at is null or f.generated_at>=p.since_at
 group by p.period,p.sort_order order by p.sort_order;
 grant select on public.btc_10m_forecast_stats to anon,authenticated,service_role;
+grant usage on schema vault to service_role;
+grant select on vault.decrypted_secrets to service_role;
+create or replace function public.verify_btc_10m_worker_secret(candidate text)
+returns boolean language sql stable security invoker set search_path = '' as $$
+  select candidate is not null and exists (
+    select 1 from vault.decrypted_secrets
+    where name = 'btc_10m_worker_secret' and decrypted_secret = candidate
+  );
+$$;
+revoke all on function public.verify_btc_10m_worker_secret(text) from public, anon, authenticated;
+grant execute on function public.verify_btc_10m_worker_secret(text) to service_role;
+
+select vault.create_secret(encode(gen_random_bytes(32), 'hex'), 'btc_10m_worker_secret',
+  'Private shared secret for the isolated BTC 10-minute forecast worker');
+select vault.create_secret('sb_publishable_qKwe2p1TD7MbsipVM17_2w_Nbn6ZgwD', 'btc_10m_publishable_key',
+  'Public Supabase key used only as the Edge Function gateway apikey');
+select vault.create_secret('https://xngzpvzhmtuxplslvtud.supabase.co', 'btc_10m_project_url',
+  'Supabase project URL for the BTC 10-minute worker');
+
+select cron.schedule('btc-10m-forecast-worker', '* * * * *', $btc10m$
+  select net.http_post(
+    url := (select decrypted_secret from vault.decrypted_secrets where name = 'btc_10m_project_url') || '/functions/v1/btc-10m-worker',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'apikey', (select decrypted_secret from vault.decrypted_secrets where name = 'btc_10m_publishable_key'),
+      'x-worker-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'btc_10m_worker_secret')
+    ),
+    body := jsonb_build_object('source', 'supabase-cron', 'time', now()),
+    timeout_milliseconds := 15000
+  );
+$btc10m$);
