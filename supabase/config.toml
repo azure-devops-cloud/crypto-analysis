@@ -1,0 +1,2 @@
+[functions.btc-10m-worker]
+verify_jwt = false
