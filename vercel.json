@@ -1,1 +1,9 @@
-{}
+{
+  "functions": {
+    "app/api/btc-10m/route.ts": {
+      "regions": [
+        "bom1"
+      ]
+    }
+  }
+}
