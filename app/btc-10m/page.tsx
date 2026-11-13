@@ -1,5 +1,6 @@
 "use client";
 import {useCallback,useEffect,useState} from "react";
+import HistoryPanel from "./HistoryPanel";
 
 type Forecast={ok:boolean;symbol:string;horizonMinutes:number;generatedAt:string;expiresAt:string;price:number;direction:"UP"|"DOWN"|"NO_CLEAR_SIGNAL";score:number;confidenceBand:string;probability:number|null;probabilityNote:string;dataQuality:string;conflict:boolean;components:Record<string,number>;indicators:Record<string,number>;candles:{time:number;open:number;high:number;low:number;close:number;volume:number}[];error?:string;disclaimer:string};
 const money=(n:number)=>n.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2});
@@ -24,6 +25,7 @@ export default function BtcTenMinute(){
  <section className="btc10panel"><b>Signal components</b>{Object.entries(data.components).map(([k,v])=><div className="btc10row" key={k}><span>{k}</span><b>{v>0?"+":""}{v.toFixed(2)}</b></div>)}</section>
  <small className="btc10disclaimer">{data.disclaimer}</small>
  </>}
+ <HistoryPanel />
  <footer>BTC 10m baseline · Binance public market data · refreshed every 60 seconds · analysis only</footer>
  </main>
 }
